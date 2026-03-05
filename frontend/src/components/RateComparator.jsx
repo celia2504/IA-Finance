@@ -4,7 +4,7 @@ export default function RateComparator({ finance }) {
   return (
     <div className="bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700 mt-6 animate-fade-in">
       <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-        📉 Comparateur de Taux
+         Comparateur de Taux
       </h3>
 
       <div className="flex flex-col gap-4">

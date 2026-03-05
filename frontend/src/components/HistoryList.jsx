@@ -8,7 +8,7 @@ export default function HistoryList({ history }) {
   return (
     <div className="bg-slate-800 p-6 rounded-2xl shadow-xl mt-8 border border-slate-700 animate-fade-in">
       <h3 className="text-xl font-bold text-gray-200 mb-4 flex items-center gap-2">
-        🕒 Historique des Simulations
+         Historique des Simulations
       </h3>
       
       <div className="overflow-x-auto rounded-lg border border-slate-700">

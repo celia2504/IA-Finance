@@ -42,7 +42,7 @@ export default function FinancialCharts({ data, result }) {
       
       {/* GRAPHIQUE 1 : RÉPARTITION (Budget) */}
       <div className="bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700 flex flex-col items-center">
-        <h3 className="text-lg font-bold text-gray-200 mb-4 flex items-center gap-2">📊 Budget Mensuel Estimé</h3>
+        <h3 className="text-lg font-bold text-gray-200 mb-4 flex items-center gap-2"> Budget Mensuel Estimé</h3>
         <div className="w-full h-64">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -58,7 +58,7 @@ export default function FinancialCharts({ data, result }) {
 
       {/* GRAPHIQUE 2 : RISQUE D'ENDETTEMENT (Jauge) */}
       <div className="bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700 flex flex-col items-center">
-        <h3 className="text-lg font-bold text-gray-200 mb-4">⚠️ Analyse du Risque</h3>
+        <h3 className="text-lg font-bold text-gray-200 mb-4"> Analyse du Risque</h3>
         <div className="w-full h-64">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={barData} layout="vertical" margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
@@ -81,7 +81,7 @@ export default function FinancialCharts({ data, result }) {
       {/* GRAPHIQUE 3 : COURBE D'AMORTISSEMENT (Seulement si résultat) */}
       {result && (
         <div className="bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700 col-span-1 md:col-span-2">
-          <h3 className="text-lg font-bold text-gray-200 mb-4">📉 Projection du Remboursement</h3>
+          <h3 className="text-lg font-bold text-gray-200 mb-4"> Projection du Remboursement</h3>
           <div className="w-full h-72">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={areaData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
@@ -104,7 +104,7 @@ export default function FinancialCharts({ data, result }) {
 
       {/* GRAPHIQUE 4 : RADAR SCORING (Profil) */}
       <div className="bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700 col-span-1 md:col-span-2 flex flex-col items-center">
-         <h3 className="text-lg font-bold text-gray-200 mb-4">🕸️ Votre Profil Financier (Scoring IA)</h3>
+         <h3 className="text-lg font-bold text-gray-200 mb-4"> Votre Profil Financier (Scoring IA)</h3>
          <div className="w-full h-80">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>

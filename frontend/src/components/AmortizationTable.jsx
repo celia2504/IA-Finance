@@ -9,7 +9,7 @@ export default function AmortizationTable({ schedule }) {
         onClick={() => setIsOpen(!isOpen)}
         className="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-4 rounded-xl flex justify-between items-center transition-colors border border-slate-600"
       >
-        <span>📅 Voir l'Échéancier (Tableau d'amortissement)</span>
+        <span> Voir l'Échéancier (Tableau d'amortissement)</span>
         <span>{isOpen ? '▲' : '▼'}</span>
       </button>
 
