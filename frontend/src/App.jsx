@@ -3,10 +3,9 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate } f
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import History from './pages/History';
-import Login from './pages/Login';      // <--- NOUVEAU
-import Register from './pages/Register'; // <--- NOUVEAU
+import Login from './pages/Login';
+import Register from './pages/Register';
 
-// --- SIDEBAR (S'affiche seulement si connecté) ---
 function Sidebar({ onLogout }) {
   const location = useLocation();
   const menuItems = [
@@ -20,7 +19,6 @@ function Sidebar({ onLogout }) {
       <div className="p-6 border-b border-white/10">
         <h1 className="text-2xl font-bold tracking-wider text-white">CREDIT<span className="text-blue-500">PATH</span></h1>
       </div>
-      
       <nav className="flex-1 py-6 px-3 space-y-2">
         {menuItems.map((item) => (
           <Link key={item.path} to={item.path} className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${location.pathname === item.path ? "bg-blue-600/20 text-blue-400 border border-blue-500/30" : "text-gray-400 hover:bg-white/5 hover:text-white"}`}>
@@ -29,7 +27,6 @@ function Sidebar({ onLogout }) {
           </Link>
         ))}
       </nav>
-
       <div className="p-6 border-t border-white/10">
         <button onClick={onLogout} className="flex items-center gap-2 text-rose-400 hover:text-rose-300 text-sm font-bold w-full">
            <span>🚪</span> Se déconnecter
@@ -40,13 +37,27 @@ function Sidebar({ onLogout }) {
 }
 
 function App() {
-  // GESTION DE LA CONNEXION
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('isAuthenticated') === 'true';
-  });
-
-  const handleLogout = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => localStorage.getItem('isAuthenticated') === 'true');
+  
+const handleLogout = () => {
+    // 1. On nettoie le navigateur (LocalStorage)
     localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('lastResult');
+    
+    // 2. On remet toutes les variables React à ZÉRO
+    setFormData({ 
+      revenu_mensuel: "", 
+      dette_totale: "", 
+      anciennete_emploi: "", 
+      epargne: "", 
+      montant_demande: "", 
+      duree_pret: "" 
+    });
+    setResult(null);   // On efface le résultat
+    setHistory([]);    // On vide la liste d'historique affichée
+    
+    // 3. On coupe l'accès
     setIsAuthenticated(false);
   };
 
@@ -55,29 +66,49 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState([]);
 
+  // Récupérer l'historique DE L'UTILISATEUR CONNECTÉ
+  const fetchUserHistory = () => {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+        fetch(`http://127.0.0.1:8000/history/${userId}`)
+          .then(r => r.json())
+          .then(setHistory)
+          .catch(console.error);
+    }
+  };
+
+  useEffect(() => { 
+      if (isAuthenticated) fetchUserHistory(); 
+  }, [isAuthenticated]); // Se lance quand on se connecte
+
   useEffect(() => { if (result) localStorage.setItem("lastResult", JSON.stringify(result)); }, [result]);
-  useEffect(() => { fetch('http://127.0.0.1:8000/history').then(r => r.json()).then(setHistory).catch(console.error); }, []);
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: parseFloat(e.target.value) || 0 });
+
   const handleSubmit = async (e) => {
     e.preventDefault(); setLoading(true); setResult(null);
+    const userId = localStorage.getItem('userId'); // On récupère l'ID
+    
     try {
-      const res = await fetch('http://127.0.0.1:8000/predict', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData) });
+      // On envoie l'ID avec les données
+      const res = await fetch('http://127.0.0.1:8000/predict', { 
+          method: 'POST', 
+          headers: { 'Content-Type': 'application/json' }, 
+          body: JSON.stringify({ ...formData, user_id: parseInt(userId) }) 
+      });
+      
       if (!res.ok) throw new Error("Err");
       const data = await res.json();
       setResult(data);
-      fetch('http://127.0.0.1:8000/history').then(r => r.json()).then(setHistory);
+      fetchUserHistory(); // On recharge SON historique
     } catch (err) { alert("Erreur connexion serveur"); } finally { setLoading(false); }
   };
 
   return (
     <Router>
       <Routes>
-        {/* ROUTES PUBLIQUES (Login/Register) */}
         <Route path="/login" element={!isAuthenticated ? <Login setIsAuthenticated={setIsAuthenticated} /> : <Navigate to="/" />} />
         <Route path="/register" element={!isAuthenticated ? <Register /> : <Navigate to="/" />} />
-
-        {/* ROUTES PRIVÉES (Protégées) */}
         <Route path="*" element={
           isAuthenticated ? (
             <div className="flex min-h-screen">

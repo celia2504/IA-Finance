@@ -21,7 +21,7 @@ export default function Register() {
     setSuccess('');
     setLoading(true); // Active l'état de chargement
     
-    console.log("Envoi du formulaire...", formData); // Regarde la console (F12) si ça bug
+    console.log("Envoi du formulaire...", formData); 
 
     try {
       const res = await fetch('http://127.0.0.1:8000/register', {

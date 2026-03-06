@@ -16,6 +16,7 @@ export default function Login({ setIsAuthenticated }) {
       
       if (res.ok) {
         localStorage.setItem('isAuthenticated', 'true'); // On sauvegarde la session
+        localStorage.setItem('userId', data.user_id);
         setIsAuthenticated(true);
         navigate('/'); // On envoie vers l'accueil
       } else {
@@ -27,7 +28,7 @@ export default function Login({ setIsAuthenticated }) {
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="glass-panel p-8 rounded-2xl w-full max-w-md animate-fade-in">
-        <h2 className="text-3xl font-bold text-white text-center mb-2">Bon retour 👋</h2>
+        <h2 className="text-3xl font-bold text-white text-center mb-2">Bon retour</h2>
         <p className="text-gray-400 text-center mb-8">Connectez-vous à votre espace CreditPath.</p>
         
         {error && <div className="bg-rose-500/20 text-rose-300 p-3 rounded-lg text-sm mb-4 border border-rose-500/30 text-center">{error}</div>}
